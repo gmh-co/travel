@@ -1,0 +1,53 @@
+{
+  "movement": [
+    {
+      "from": "Brisbane",
+      "stops": ["San Francisco"],
+      "to": "Las Vegas",
+      "date": "20/11/2023 AEST"
+    },
+    {
+      "from": "Las Vegas",
+      "to": "Los Angeles",
+      "date": "26/11/2023 PST"
+    },
+    {
+      "from": "Los Angeles",
+      "to": "San Francisco",
+      "date": "30/11/2023 PST"
+    },
+    {
+      "from": "San Francisco",
+      "stops": ["Los Angeles"],
+      "to": "Brisbane",
+      "date": "6/12/2023 PST"
+    }
+  ],
+  "activites": [
+    {
+        "name": "Grand Canyon Tour",
+        "date": "23/11/2023 PST",
+        "location": "Las Vegas"
+    },
+    {
+        "name": "Cirqe Du Soleil",
+        "date": "24/11/2023 PST",
+        "location": "Las Vegas"
+    },
+    {
+        "name": "LA Clippers vs Denver Nuggets",
+        "date": "27/11/2023 PST",
+        "location": "Los Angeles"
+    },
+    {
+        "name": "Comedy Store",
+        "date": "28/11/2023 PST",
+        "location": "Los Angeles"
+    },
+    {
+        "name": "Alcatraz Night Tour 👻",
+        "date": "5/12/2023 PST",
+        "location": "San Francisco"
+    }
+  ]
+}

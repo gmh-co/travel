@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Holiday Times!</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+      body {
+        background-color: #FFF;
+      }
+      .map-container {
+        position: relative;
+        overflow: hidden;
+        padding-top: 56.25%;
+      }
+
+      .map-container iframe {
+        border: none;
+        position: absolute;
+        top: -60px;
+        left: 0;
+        width: 100%;
+        height: calc(
+          100% + 110px
+        );
+      }
+
+      .countdown-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        flex-direction: column;
+      }
+      .countdown {
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+
+      @media (max-width: 767px) {
+        .map-container iframe {
+          transform: scale(0.94);
+          transform-origin: top center;
+          height: calc(100% + 130px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container py-5">
+      <div class="row mb-4">
+        <div class="col">
+          <div class="map-container">
+            <iframe
+              src="https://www.google.com/maps/d/u/0/embed?mid=1pk0DN485XlPGskRIBVgL4dRUM2ckNWs&ehbc=2E312F&ui=none"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col">
+          <div id="countdown" class="countdown"></div>
+        </div>
+      </div>
+      <div class="row schedule">
+        <div class="col">
+          <h2 class="mb-3">Schedule</h2>
+          <table class="table table-hover" id="scheduleTable">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">From</th>
+                <th scope="col">Stops</th>
+                <th scope="col">To</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row activities">
+        <div class="col">
+          <h2 class="mb-3">Activities</h2>
+          <table class="table table-hover" id="activitiesTable">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Name</th>
+                <th scope="col">Location</th>
+              </tr>
+            </thead>
+            <tbody id="activitiesBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script>
+      function countdown() {
+        const targetDate = new Date("Nov 20, 2023 11:30:00 GMT+1000").getTime();
+        const countdownElement = document.getElementById("countdown");
+
+        const x = setInterval(function () {
+          const now = new Date().getTime();
+          const distance = targetDate - now;
+
+          if (distance < 0) {
+            clearInterval(x);
+            countdownElement.style.display = "none"; // This hides the countdown element
+            return; // Exit the function
+          }
+
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor(
+            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          const minutes = Math.floor(
+            (distance % (1000 * 60 * 60)) / (1000 * 60)
+          );
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          countdownElement.innerHTML =
+            "Departure: " +
+            days +
+            "d " +
+            hours +
+            "h " +
+            minutes +
+            "m " +
+            seconds +
+            "s ";
+        }, 1000);
+      }
+      function populateSchedule(movementData) {
+        const tableBody = document.getElementById("tableBody");
+        let tableRows = "";
+
+        movementData.forEach((item) => {
+          const stops =
+            item.stops && item.stops.length > 0
+              ? item.stops.join(", ")
+              : "Direct";
+          tableRows += `
+      <tr>
+        <th scope="row">${item.date}</th>
+        <td>${item.from}</td>
+        <td>${stops}</td>
+        <td>${item.to}</td>
+      </tr>
+    `;
+        });
+
+        tableBody.innerHTML = tableRows;
+      }
+
+      function populateActivities(activitiesData) {
+        const activitiesBody = document.getElementById("activitiesBody");
+        let activitiesRows = "";
+
+        activitiesData.forEach((activity) => {
+          activitiesRows += `
+      <tr>
+        <th scope="row">${activity.date}</th>
+        <td>${activity.name}</td>
+        <td>${activity.location}</td>
+      </tr>
+    `;
+        });
+
+        activitiesBody.innerHTML = activitiesRows;
+      }
+
+      function loadData() {
+        fetch("data.json")
+          .then((response) => response.json())
+          .then((data) => {
+            populateSchedule(data.movement);
+            populateActivities(data.activites); // Make sure this matches your JSON key for activities
+          })
+          .catch((error) => {
+            console.error("Error loading the JSON data: ", error);
+          });
+
+        // No need to set timeouts here if countdown and hideMapDetails are independent
+        countdown();
+        // hideMapDetails(); // Uncomment this if you have this function defined and need to call it
+      }
+
+      window.onload = loadData;
+    </script>
+  </body>
+</html>
