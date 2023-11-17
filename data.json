@@ -25,22 +25,22 @@
   ],
   "activites": [
     {
-        "name": "Grand Canyon Tour",
+        "name": "Grand Canyon Tour 🏞️",
         "date": "23/11/2023 PST",
         "location": "Las Vegas"
     },
     {
-        "name": "Cirqe Du Soleil",
+        "name": "Cirqe Du Soleil 🎪",
         "date": "24/11/2023 PST",
         "location": "Las Vegas"
     },
     {
-        "name": "LA Clippers vs Denver Nuggets",
+        "name": "LA Clippers vs Denver Nuggets 🏀",
         "date": "27/11/2023 PST",
         "location": "Los Angeles"
     },
     {
-        "name": "Comedy Store",
+        "name": "Comedy Store 🎭",
         "date": "28/11/2023 PST",
         "location": "Los Angeles"
     },

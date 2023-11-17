@@ -3,8 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Gerard Habchi" />
     <title>Holiday Times!</title>
-    <link rel="shortcut icon" type="image/png" href="icon.png"/>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="icon.png"
+      alt="Holiday Times"
+    />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -12,7 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <style>
       body {
-        background-color: #FFF;
+        background-color: #fff;
       }
       .map-container {
         position: relative;
@@ -26,9 +32,7 @@
         top: -60px;
         left: 0;
         width: 100%;
-        height: calc(
-          100% + 110px
-        );
+        height: calc(100% + 110px);
       }
 
       .countdown-container {
@@ -44,12 +48,24 @@
         margin-bottom: 1rem;
         text-align: center;
       }
+      .map-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        z-index: 10;
+      }
 
       @media (max-width: 767px) {
         .map-container iframe {
-          transform: scale(0.94);
+          transform: scale(0.85);
           transform-origin: top center;
           height: calc(100% + 130px);
+        }
+        .map-overlay {
+          display: none;
         }
       }
     </style>
@@ -64,6 +80,7 @@
               allowfullscreen
               loading="lazy"
             ></iframe>
+            <div class="map-overlay"></div>
           </div>
         </div>
       </div>
@@ -104,98 +121,6 @@
         </div>
       </div>
     </div>
-    <script>
-      function countdown() {
-        const targetDate = new Date("Nov 20, 2023 11:30:00 GMT+1000").getTime();
-        const countdownElement = document.getElementById("countdown");
-
-        const x = setInterval(function () {
-          const now = new Date().getTime();
-          const distance = targetDate - now;
-
-          if (distance < 0) {
-            clearInterval(x);
-            countdownElement.style.display = "none"; // This hides the countdown element
-            return; // Exit the function
-          }
-
-          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-          const hours = Math.floor(
-            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-          );
-          const minutes = Math.floor(
-            (distance % (1000 * 60 * 60)) / (1000 * 60)
-          );
-          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-          countdownElement.innerHTML =
-            "Departure: " +
-            days +
-            "d " +
-            hours +
-            "h " +
-            minutes +
-            "m " +
-            seconds +
-            "s ";
-        }, 1000);
-      }
-      function populateSchedule(movementData) {
-        const tableBody = document.getElementById("tableBody");
-        let tableRows = "";
-
-        movementData.forEach((item) => {
-          const stops =
-            item.stops && item.stops.length > 0
-              ? item.stops.join(", ")
-              : "";
-          tableRows += `
-      <tr>
-        <th scope="row">${item.date}</th>
-        <td>${item.from}</td>
-        <td>${stops}</td>
-        <td>${item.to}</td>
-      </tr>
-    `;
-        });
-
-        tableBody.innerHTML = tableRows;
-      }
-
-      function populateActivities(activitiesData) {
-        const activitiesBody = document.getElementById("activitiesBody");
-        let activitiesRows = "";
-
-        activitiesData.forEach((activity) => {
-          activitiesRows += `
-      <tr>
-        <th scope="row">${activity.date}</th>
-        <td>${activity.name}</td>
-        <td>${activity.location}</td>
-      </tr>
-    `;
-        });
-
-        activitiesBody.innerHTML = activitiesRows;
-      }
-
-      function loadData() {
-        fetch("data.json")
-          .then((response) => response.json())
-          .then((data) => {
-            populateSchedule(data.movement);
-            populateActivities(data.activites); // Make sure this matches your JSON key for activities
-          })
-          .catch((error) => {
-            console.error("Error loading the JSON data: ", error);
-          });
-
-        // No need to set timeouts here if countdown and hideMapDetails are independent
-        countdown();
-        // hideMapDetails(); // Uncomment this if you have this function defined and need to call it
-      }
-
-      window.onload = loadData;
-    </script>
+    <script src="scripts.js"></script>
   </body>
 </html>
